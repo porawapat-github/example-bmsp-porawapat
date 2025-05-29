@@ -1,11 +1,30 @@
 import React, { useEffect, useState } from 'react';
-import { Card, Avatar, Row, Col, Table, Tag, Typography, Spin, message, Divider, Space, Button, Grid } from 'antd';
-import { GithubOutlined, UserOutlined, TeamOutlined, BookOutlined } from '@ant-design/icons';
+import {
+  Card,
+  Avatar,
+  Row,
+  Col,
+  Table,
+  Tag,
+  Typography,
+  Spin,
+  message,
+  Divider,
+  Space,
+  Button,
+  Grid,
+} from 'antd';
+import {
+  GithubOutlined,
+  UserOutlined,
+  TeamOutlined,
+  BookOutlined,
+} from '@ant-design/icons';
 
 const { Title, Paragraph, Text } = Typography;
 const { useBreakpoint } = Grid;
 
-const DashboardGit = () => {
+const Dashboard = () => {
   const [userData, setUserData] = useState(null);
   const [repos, setRepos] = useState([]);
   const [loadingUser, setLoadingUser] = useState(true);
@@ -13,42 +32,40 @@ const DashboardGit = () => {
   const screens = useBreakpoint();
 
   useEffect(() => {
-    // Fetch user profile data
     fetch('https://api.github.com/users/porawapat-github')
-      .then(res => {
+      .then((res) => {
         if (!res.ok) {
           throw new Error('Failed to fetch user data');
         }
         return res.json();
       })
-      .then(data => {
+      .then((data) => {
         setUserData(data);
         setLoadingUser(false);
       })
-      .catch(err => {
+      .catch((err) => {
         console.error(err);
         message.error('Unable to retrieve user');
         setLoadingUser(false);
       });
 
-    // Fetch user repositories
     fetch('https://api.github.com/users/porawapat-github/repos')
-      .then(res => {
+      .then((res) => {
         if (!res.ok) {
           throw new Error('Failed to fetch repositories');
         }
         return res.json();
       })
-      .then(data => {
-        // เรียงจากใหม่ไปเก่า (ล่าสุดอยู่บนสุด)
-        const sorted = data.sort((a, b) => new Date(b.updated_at) - new Date(a.updated_at));
+      .then((data) => {
+        const sorted = data.sort(
+          (a, b) => new Date(b.updated_at) - new Date(a.updated_at)
+        );
         setRepos(sorted);
         setLoadingRepos(false);
       })
-      .catch(err => {
-        // บันทึกข้อผิดพลาดและแสดงข้อความ
+      .catch((err) => {
         console.error(err);
-        message.error('Unable to retrie Repository ได้');
+        message.error('ไม่สามารถเรียกข้อมูลพื้นที่เก็บข้อมูลได้');
         setLoadingRepos(false);
       });
   }, []);
@@ -71,7 +88,17 @@ const DashboardGit = () => {
       dataIndex: 'language',
       key: 'language',
       render: (lang) => (
-        <Tag color={lang === 'JavaScript' ? 'gold' : lang === 'TypeScript' ? 'blue' : lang ? 'green' : 'default'}>
+        <Tag
+          color={
+            lang === 'JavaScript'
+              ? 'gold'
+              : lang === 'TypeScript'
+              ? 'blue'
+              : lang
+              ? 'green'
+              : 'default'
+          }
+        >
           {lang || 'N/A'}
         </Tag>
       ),
@@ -111,12 +138,10 @@ const DashboardGit = () => {
           background: '#001529',
           borderRadius: 16,
         }}
-        bodyStyle={{
-          padding: screens.xs ? 12 : 24,
-        }}
+        styles={{ body: { padding: screens.xs ? 12 : 24 } }} // ✅ แก้ bodyStyle เป็น styles.body
       >
         <Row align="middle" gutter={[16, 16]}>
-          <Col xs={24} sm={6} md={4} style={{ textAlign: 'center' }}>
+          <Col xs={24} sm={6} md={4} style={{ textAlign: 'center' }}> {/* ✅ แก้จาก Style เป็น style */}
             <Avatar
               size={screens.xs ? 64 : 100}
               src={userData?.avatar_url}
@@ -136,7 +161,9 @@ const DashboardGit = () => {
               <GithubOutlined /> GitHub Dashboard
             </Title>
             {loadingUser ? (
-              <Spin tip="loading data of user..." />
+              <Spin spinning={loadingUser} tip="loading data of user...">
+                <div style={{ height: 80 }} />
+              </Spin> // ✅ เพิ่ม div child ให้ Spin แสดง tip ได้
             ) : (
               userData && (
                 <Space direction="vertical" size="small">
@@ -146,10 +173,19 @@ const DashboardGit = () => {
                   >
                     {userData.name || userData.login}
                   </Title>
-                  <Paragraph style={{ color: '#fff', margin: 0, fontSize: screens.xs ? 13 : undefined }}>
-                    <TeamOutlined /> <strong>Followers:</strong> {userData.followers} &nbsp;|&nbsp;
-                    <UserOutlined /> <strong>Following:</strong> {userData.following} &nbsp;|&nbsp;
-                    <BookOutlined /> <strong>Public Repos:</strong> {userData.public_repos}
+                  <Paragraph
+                    style={{
+                      color: '#fff',
+                      margin: 0,
+                      fontSize: screens.xs ? 13 : undefined,
+                    }}
+                  >
+                    <TeamOutlined /> <strong>Followers:</strong>{' '}
+                    {userData.followers} &nbsp;|&nbsp;
+                    <UserOutlined /> <strong>Following:</strong>{' '}
+                    {userData.following} &nbsp;|&nbsp;
+                    <BookOutlined /> <strong>Public Repos:</strong>{' '}
+                    {userData.public_repos}
                   </Paragraph>
                   <Button
                     type="primary"
@@ -157,7 +193,7 @@ const DashboardGit = () => {
                     href={userData.html_url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    size={screens.xs ? "small" : "middle"}
+                    size={screens.xs ? 'small' : 'middle'}
                   >
                     View GitHub Profile
                   </Button>
@@ -178,7 +214,7 @@ const DashboardGit = () => {
         variant="outlined"
         hoverable
         style={{ borderRadius: 16 }}
-        bodyStyle={{ padding: screens.xs ? 8 : 24 }}
+        styles={{ body: { padding: screens.xs ? 8 : 24 } }} // ✅ แก้ bodyStyle เป็น styles.body
       >
         <Spin tip="Loading of Repository..." spinning={loadingRepos}>
           <Table
@@ -189,7 +225,7 @@ const DashboardGit = () => {
             bordered
             style={{ minHeight: 200 }}
             scroll={{ x: 600 }}
-            size={screens.xs ? "small" : "middle"}
+            size={screens.xs ? 'small' : 'middle'}
           />
         </Spin>
       </Card>
@@ -197,4 +233,4 @@ const DashboardGit = () => {
   );
 };
 
-export default DashboardGit;
+export default Dashboard;

@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import '@ant-design/v5-patch-for-react-19';
 import { Button, Card, Divider, Avatar, Typography, Space } from "antd";
 const { Title, Text, Paragraph } = Typography;
 
