@@ -5,8 +5,8 @@ import React from "react";
 
 function page() {
   return (
-    <div>
-      <Sibar/>
+    <div className="overflow-auto hide-scrollbar">
+      <Sibar />
     </div>
   );
 }

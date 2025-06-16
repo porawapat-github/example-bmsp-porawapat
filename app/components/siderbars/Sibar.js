@@ -5,11 +5,15 @@ import {
   GithubOutlined,
   BookOutlined,
   UserOutlined,
+  PictureOutlined,
 } from '@ant-design/icons';
-import { Breadcrumb, Layout, Menu, theme } from 'antd';
 
+import { Breadcrumb, Layout, Menu, theme } from 'antd';
 import Page from '../pages/Page';
 import Dashboard from '../pages/Dashboard';
+import FloatingInfo from '../floatingInfos/FloatingInfo';
+import ImageJapan from '../pages/Images/ImageJapan';
+import ImageNaruto from '../pages/Images/ImageNaruto';
 
 const { Header, Content, Footer, Sider } = Layout;
 function getItem(label, key, icon, children) {
@@ -28,8 +32,19 @@ const items = [
     getItem('Bill', '4'),
     getItem('Alex', '5'),
   ]),
-  getItem('Performance', 'sub2', <BookOutlined />, [getItem('Team 1', '6'), getItem('Team 2', '8')]),
-  getItem('Files', '9', <FileOutlined />),
+  getItem('Performance', 'sub2', <BookOutlined />, [
+    getItem('Team 1', '6'), 
+    getItem('Team 2', '8')
+  ]),
+  getItem('Picture', 'sub3', <PictureOutlined />, [
+    getItem('Location', 'sub4', null, [
+      getItem('Japan', '9'),
+    ]),
+    getItem('Anime', 'sub5', null, [
+      getItem('Naruto', '10'),
+    ]),
+  ]),
+  getItem('Files', '11', <FileOutlined />),
 ];
 
 const breadcrumbMap = {
@@ -40,7 +55,9 @@ const breadcrumbMap = {
   '5': [{ title: 'My Friend' }, { title: 'Alex' }],
   '6': [{ title: 'Performance' }, { title: 'Team 1' }],
   '8': [{ title: 'Performance' }, { title: 'Team 2' }],
-  '9': [{ title: 'Files' }],
+  '9': [{ title: 'Picture' }, { title: 'Japan' }],
+  '10': [{ title: 'Picture' }, { title: 'Naruto' }],
+  '11': [{ title: 'Files' }],
 };
 
 const Sibar = () => {
@@ -76,23 +93,28 @@ const Sibar = () => {
               borderRadius: borderRadiusLG,
             }}
           >
-            {selectedkey === '1' && <Page />}
-            {selectedkey === '2' && <Dashboard />}
-            {selectedkey === '3' && (
-              <iframe
-                src="https://example-bmsp-jab.vercel.app/"
-                title="Jab"
-                width="100%"
-                height="600"
-                style={{ border: 0, borderRadius: 12, minHeight: 500 }}
-                allowFullScreen
-              />
-            )}
+            <div className="overflow-auto scrollbar-hide">
+              {selectedkey === '1' && <Page />}
+              {selectedkey === '2' && <Dashboard />}
+              {selectedkey === '3' && (
+                <iframe
+                  src="https://example-bmsp-jab.vercel.app/"
+                  title="Jab"
+                  width="100%"
+                  height="600"
+                  style={{ border: 0, borderRadius: 12, minHeight: 500 }}
+                  allowFullScreen
+                />
+              )}
+              {selectedkey === '9' && <ImageJapan />}
+              {selectedkey === '10' && <ImageNaruto />}
+            </div>
           </div>
         </Content>
         <Footer style={{ textAlign: 'center' }}>
           Ant Design ©{new Date().getFullYear()} Created by Ant UED
         </Footer>
+        <FloatingInfo /> {/* สภาพอากาส */}
       </Layout>
     </Layout>
   );
